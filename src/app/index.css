@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+@theme {
+  --color-brand-bg: #0f172a;
+  --color-brand-card: #1e293b;
+  --color-brand-accent: #3b82f6;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
+}
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply bg-brand-bg text-slate-200 font-mono min-h-screen selection:bg-brand-accent/30;
+  }
+}
+
+@layer components {
+  .algo-container {
+    @apply flex items-end justify-center gap-2 p-8 bg-brand-card rounded-2xl shadow-xl min-h-[300px];
+  }
+
+  .btn-primary {
+    @apply px-6 py-2 bg-brand-accent hover:bg-blue-600 transition-colors rounded-lg font-bold text-white;
+  }
+}
