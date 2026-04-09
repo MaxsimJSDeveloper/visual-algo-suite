@@ -4,10 +4,8 @@ import Loader from "@/shared/ui/Loader";
 import { Sidebar } from "@/widgets/Sidebar";
 
 const HomePage = lazy(() => import("@/pages/homePage"));
-const SortingAlgorithmsPage = lazy(() =>
-  import("@/pages/sortingAlgorithmsPage").then((module) => ({
-    default: module.SortingAlgorithmsPage,
-  })),
+const SortingAlgorithmsPage = lazy(
+  () => import("@/pages/sortingAlgorithmsPage"),
 );
 const OtherAlgorithmsPage = lazy(() => import("@/pages/otherAlgorithmsPage"));
 const SearchingAlgorithmsPage = lazy(

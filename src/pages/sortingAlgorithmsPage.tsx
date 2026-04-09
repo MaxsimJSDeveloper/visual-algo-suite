@@ -5,7 +5,7 @@ import { Button } from "@/shared/ui/Button";
 import { Title } from "@/shared/ui/Title";
 import { bubbleSort } from "@/features/sorting/model/bubbleSort";
 
-export const SortingAlgorithmsPage = () => {
+const SortingAlgorithmsPage = () => {
   const [fruits, setFruits] = useState(() => createFruitArr(10));
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
   const [sortedIndices, setSortedIndices] = useState<number[]>([]);
@@ -60,3 +60,5 @@ export const SortingAlgorithmsPage = () => {
     </div>
   );
 };
+
+export default SortingAlgorithmsPage;
