@@ -10,7 +10,7 @@ export const FruitCard = ({ fruit, isActive, isSorted }: FruitCardProps) => {
   return (
     <div
       className={`
-        relative flex flex-col items-center justify-end w-16 transition-all duration-200
+        relative flex flex-col w-16 transition-all duration-200
         ${isActive ? "scale-105 z-10" : "scale-100 z-0"} 
       `}
       style={{ height: `${60 + fruit.price * 2}px` }}

@@ -14,7 +14,7 @@ export const Button = ({
   variant = "primary",
 }: ButtonProps) => {
   const baseStyles =
-    "px-6 py-2.5 rounded-xl font-bold transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer";
+    "px-6 py-2.5 rounded-xl font-bold transition-all w-full active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer";
   const variants = {
     primary:
       "bg-brand-accent hover:bg-blue-600 text-white shadow-lg shadow-brand-accent/20",

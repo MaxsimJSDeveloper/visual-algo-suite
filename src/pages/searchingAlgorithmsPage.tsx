@@ -4,6 +4,12 @@ import { SortingVisualizer } from "@/widgets/SortingVisualizer";
 import { linearSearch } from "@/features/searching/model/linearSearch";
 import { Title } from "@/shared/ui/Title";
 import { Button } from "@/shared/ui/Button";
+import { Input } from "@/shared/ui/Input";
+import { useForm } from "react-hook-form";
+
+interface SearchForm {
+  price: number;
+}
 
 const SearchingAlgorithmsPage = () => {
   const [fruits, setFruits] = useState(() => createFruitArr(12));
@@ -25,24 +31,46 @@ const SearchingAlgorithmsPage = () => {
     setFoundIndex(null);
   };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SearchForm>({
+    defaultValues: { price: fruits[0]?.price || 0 },
+  });
+
+  const onSearchSubmit = (data: SearchForm) => {
+    setTargetPrice(data.price);
+    handleStartSearch();
+  };
+
   return (
     <div className="p-8 space-y-10">
       <Title as="h1">Search Laboratory 🔍</Title>
 
-      <div className="flex items-center gap-6 bg-brand-card/20 p-6 rounded-2xl border border-slate-800">
-        <div className="space-y-1 text-slate-400">
-          <p className="text-xs uppercase tracking-wider font-bold">
-            Target Price:
-          </p>
-          <p className="text-2xl text-brand-accent font-mono font-bold">
-            ${targetPrice}
-          </p>
-        </div>
+      <div className="flex justify-between bg-brand-card/20 p-6 rounded-2xl border border-slate-800">
+        <form
+          onSubmit={handleSubmit(onSearchSubmit)}
+          className="flex items-end gap-4"
+        >
+          <Input
+            label="Target Price"
+            type="number"
+            placeholder="Enter price..."
+            {...register("price", {
+              required: "Price is required",
+              min: { value: 1, message: "Too low" },
+              max: { value: 100, message: "Too high" },
+            })}
+            error={errors.price?.message}
+          />
 
-        <div className="flex gap-3">
-          <Button onClick={handleStartSearch} disabled={isSearching}>
-            {isSearching ? "Searching..." : "Start Linear Search"}
+          <Button type="submit" disabled={isSearching}>
+            Find Fruit
           </Button>
+        </form>
+
+        <div className="block my-auto">
           <Button onClick={handleRegenerate} disabled={isSearching}>
             Regenerate
           </Button>
