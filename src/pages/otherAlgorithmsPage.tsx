@@ -1,9 +1,16 @@
 import { Title } from "@/shared/ui/Title";
 import { Button } from "@/shared/ui/Button";
-import { useStack } from "@/features/stack/model/useStack";
+import { AlgoVisualizer } from "@/widgets/AlgoVisualizer";
+import { useAlgorithm } from "@/shared/lib/algoEngine/useAlgorithm";
+import { stackPush, stackPop } from "@/features/stack/model/stackAlgos";
 
 export const OtherAlgorithmsPage = () => {
-  const { stack, push, pop, isAnimating, activeIndices } = useStack();
+  const {
+    fruits: stack,
+    activeIndices,
+    isRunning,
+    run,
+  } = useAlgorithm([], 400);
 
   return (
     <div className="page-container">
@@ -21,33 +28,34 @@ export const OtherAlgorithmsPage = () => {
 
         <div className="flex gap-3">
           <Button
-            onClick={push}
-            disabled={isAnimating || stack.length >= 10}
+            onClick={() => run(stackPush)}
+            disabled={isRunning || stack.length >= 10}
             variant="success"
           >
             Push (Add)
           </Button>
           <Button
-            onClick={pop}
+            onClick={() => run(stackPop)}
             variant="danger"
-            disabled={isAnimating || stack.length === 0}
+            disabled={isRunning || stack.length === 0}
           >
             Pop (Remove)
           </Button>
         </div>
       </div>
-      <div className="visualizer-container">
+
+      <div className="visualizer-container flex items-end justify-center min-h-[500px]">
         {stack.length === 0 ? (
-          <div className="text-slate-500 font-mono text-xl animate-pulse">
+          <div className="text-slate-500 font-mono text-xl animate-pulse pb-10">
             Stack is empty. Push some fruits!
           </div>
         ) : (
           <div className="w-full">
-            {/* <SortingVisualizer
+            <AlgoVisualizer
               fruits={stack}
               activeIndices={activeIndices}
-              sortedIndices={[]}
-            /> */}
+              successIndices={[]}
+            />
           </div>
         )}
       </div>

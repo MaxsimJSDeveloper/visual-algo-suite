@@ -1,1 +1,1 @@
-export { useStack } from "./model/useStack";
+export { stackPush, stackPop } from "./model/stackAlgos";
