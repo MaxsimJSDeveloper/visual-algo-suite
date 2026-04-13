@@ -1,60 +1,39 @@
-import { useState } from "react";
 import { createFruitArr } from "@/entities/fruit";
-import { SortingVisualizer } from "@/widgets/SortingVisualizer";
 import { Button } from "@/shared/ui/Button";
 import { Title } from "@/shared/ui/Title";
 import { bubbleSort } from "@/features/sorting/model/bubbleSort";
+import { useAlgorithm } from "@/shared/lib";
+import { AlgoVisualizer } from "@/widgets/AlgoVisualizer";
 
 const SortingAlgorithmsPage = () => {
-  const [fruits, setFruits] = useState(() => createFruitArr(10));
-  const [activeIndices, setActiveIndices] = useState<number[]>([]);
-  const [sortedIndices, setSortedIndices] = useState<number[]>([]);
-  const [isSorting, setIsSorting] = useState(false);
+  const { fruits, activeIndices, successIndices, isRunning, run, reset } =
+    useAlgorithm(createFruitArr(10), 150);
 
-  const handleRegenerate = () => {
-    setFruits(createFruitArr(10));
-    setActiveIndices([]);
-    setSortedIndices([]);
-  };
-
-  const handleStartSort = async () => {
-    setIsSorting(true);
-    await bubbleSort(
-      fruits,
-      setFruits,
-      setActiveIndices,
-      setSortedIndices,
-      250,
-    );
-    setIsSorting(false);
-  };
+  const handleStartSort = () => run(bubbleSort);
+  const handleRegenerate = () => reset(createFruitArr(10));
 
   return (
-    <div className="p-8 space-y-10">
+    <div className="page-container">
       <Title as="h1">Sorting Lab 🔬</Title>
 
-      <div className="bg-brand-card/30 border border-slate-800 rounded-3xl p-10 flex items-center justify-center min-h-[500px]">
-        <SortingVisualizer
+      <div className="visualizer-container">
+        <AlgoVisualizer
           fruits={fruits}
           activeIndices={activeIndices}
-          sortedIndices={sortedIndices}
+          successIndices={successIndices}
         />
       </div>
 
       <div className="flex gap-4">
-        <Button onClick={handleRegenerate} disabled={isSorting}>
+        <Button onClick={handleRegenerate} disabled={isRunning}>
           Regenerate Fruits
         </Button>
         <Button
           onClick={handleStartSort}
-          disabled={isSorting}
-          className={
-            !isSorting
-              ? "bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/20"
-              : ""
-          }
+          disabled={isRunning}
+          variant="success"
         >
-          {isSorting ? "Sorting..." : "Start Bubble Sort"}
+          {isRunning ? "Sorting..." : "Start Bubble Sort"}
         </Button>
       </div>
     </div>

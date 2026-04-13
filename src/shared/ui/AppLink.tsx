@@ -5,7 +5,7 @@ interface AppLinkProps extends LinkProps {
   children: ReactNode;
   variant?: "primary" | "secondary" | "success" | "accent";
   className?: string;
-  isBlock?: boolean; // Useful for making the whole card clickable
+  isBlock?: boolean;
 }
 
 export const AppLink = ({

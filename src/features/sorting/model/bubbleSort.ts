@@ -1,31 +1,23 @@
 import { type Fruit } from "@/entities/fruit";
+import type { AlgoFn } from "@/shared/lib/algoEngine/types";
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-export const bubbleSort = async (
-  fruits: Fruit[],
-  setFruits: (fruits: Fruit[]) => void,
-  setActiveIndices: (indices: number[]) => void,
-  setSortedIndices: (indices: number[]) => void,
-  speed: number,
-) => {
+export const bubbleSort: AlgoFn = async (fruits: Fruit[], controller) => {
   const arr = [...fruits];
-  const n = arr.length;
   const sorted: number[] = [];
 
-  for (let i = 0; i < n; i++) {
-    for (let j = 0; j < n - i - 1; j++) {
-      setActiveIndices([j, j + 1]);
-      await delay(speed);
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < arr.length - i - 1; j++) {
+      controller.setActiveIndices([j, j + 1]);
+      await controller.wait();
 
       if (arr[j].price > arr[j + 1].price) {
         [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-        setFruits([...arr]);
+        controller.updateFruits([...arr]);
       }
     }
-    sorted.push(n - i - 1);
-    setSortedIndices([...sorted]);
+    sorted.push(arr.length - i - 1);
+    controller.setSuccessIndices([...sorted]);
   }
 
-  setActiveIndices([]);
+  controller.setActiveIndices([]);
 };

@@ -1,27 +1,17 @@
-import type { Fruit } from "@/entities/fruit";
+import type { AlgoFn } from "@/shared/lib/algoEngine/types";
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-export const linearSearch = async (
-  fruits: Fruit[],
-  targetPrice: number,
-  setActiveIndex: (index: number | null) => void,
-  setFoundIndex: (index: number | null) => void,
-  speed: number,
-) => {
-  setFoundIndex(null);
-
+export const linearSearch: AlgoFn = async (fruits, controller, targetPrice) => {
   for (let i = 0; i < fruits.length; i++) {
-    setActiveIndex(i);
-    await delay(speed);
+    controller.setActiveIndices([i]);
+    await controller.wait();
 
     if (fruits[i].price === targetPrice) {
-      setFoundIndex(i);
-      setActiveIndex(null);
+      controller.setSuccessIndices([i]);
+      controller.setActiveIndices([]);
       return i;
     }
   }
 
-  setActiveIndex(null);
+  controller.setActiveIndices([]);
   return -1;
 };

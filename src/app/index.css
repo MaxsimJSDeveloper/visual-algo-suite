@@ -7,6 +7,10 @@
   --font-mono:
     "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     monospace;
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 @layer base {
@@ -20,11 +24,15 @@
 }
 
 @layer components {
-  .algo-container {
-    @apply flex items-end justify-center gap-2 p-8 bg-brand-card rounded-2xl shadow-xl min-h-[300px];
+  .page-container {
+    @apply p-8 space-y-10;
   }
 
-  .btn-primary {
-    @apply px-6 py-2 bg-brand-accent hover:bg-blue-600 transition-colors rounded-lg font-bold text-white;
+  .visualizer-container {
+    @apply bg-brand-card/30 border border-slate-800 rounded-3xl p-10 flex items-center justify-center min-h-[500px];
+  }
+
+  .control-panel {
+    @apply bg-brand-card/20 p-6 rounded-2xl border border-slate-800;
   }
 }

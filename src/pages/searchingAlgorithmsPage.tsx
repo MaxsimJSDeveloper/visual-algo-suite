@@ -1,54 +1,47 @@
-import { useState } from "react";
 import { createFruitArr } from "@/entities/fruit";
-import { SortingVisualizer } from "@/widgets/SortingVisualizer";
+import { AlgoVisualizer } from "@/widgets/AlgoVisualizer";
 import { linearSearch } from "@/features/searching/model/linearSearch";
 import { Title } from "@/shared/ui/Title";
 import { Button } from "@/shared/ui/Button";
 import { Input } from "@/shared/ui/Input";
 import { useForm } from "react-hook-form";
+import { useAlgorithm } from "@/shared/lib";
 
 interface SearchForm {
   price: number;
 }
 
 const SearchingAlgorithmsPage = () => {
-  const [fruits, setFruits] = useState(() => createFruitArr(12));
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const [foundIndex, setFoundIndex] = useState<number | null>(null);
-  const [isSearching, setIsSearching] = useState(false);
-  const [targetPrice, setTargetPrice] = useState<number>(fruits[4].price);
-
-  const handleStartSearch = async () => {
-    setIsSearching(true);
-    await linearSearch(fruits, targetPrice, setActiveIndex, setFoundIndex, 200);
-    setIsSearching(false);
-  };
-
-  const handleRegenerate = () => {
-    const newFruits = createFruitArr(12);
-    setFruits(newFruits);
-    setTargetPrice(newFruits[Math.floor(Math.random() * 12)].price);
-    setFoundIndex(null);
-  };
+  const { fruits, activeIndices, successIndices, isRunning, run, reset } =
+    useAlgorithm(createFruitArr(10), 150);
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<SearchForm>({
     defaultValues: { price: fruits[0]?.price || 0 },
   });
 
   const onSearchSubmit = (data: SearchForm) => {
-    setTargetPrice(data.price);
-    handleStartSearch();
+    run(linearSearch, data.price);
+  };
+
+  const handleRegenerate = () => {
+    const newFruits = createFruitArr(10);
+    reset(newFruits);
+
+    const randomTarget =
+      newFruits[Math.floor(Math.random() * newFruits.length)].price;
+    setValue("price", randomTarget);
   };
 
   return (
-    <div className="p-8 space-y-10">
+    <div className="page-container">
       <Title as="h1">Search Laboratory 🔍</Title>
 
-      <div className="flex justify-between bg-brand-card/20 p-6 rounded-2xl border border-slate-800">
+      <div className="control-panel flex justify-between">
         <form
           onSubmit={handleSubmit(onSearchSubmit)}
           className="flex items-end gap-4"
@@ -65,23 +58,23 @@ const SearchingAlgorithmsPage = () => {
             error={errors.price?.message}
           />
 
-          <Button type="submit" disabled={isSearching}>
+          <Button type="submit" disabled={isRunning}>
             Find Fruit
           </Button>
         </form>
 
         <div className="block my-auto">
-          <Button onClick={handleRegenerate} disabled={isSearching}>
+          <Button onClick={handleRegenerate} disabled={isRunning}>
             Regenerate
           </Button>
         </div>
       </div>
 
-      <div className="bg-brand-card/30 border border-slate-800 rounded-3xl p-10 flex items-center justify-center min-h-[500px]">
-        <SortingVisualizer
+      <div className="visualizer-container">
+        <AlgoVisualizer
           fruits={fruits}
-          activeIndices={activeIndex !== null ? [activeIndex] : []}
-          sortedIndices={foundIndex !== null ? [foundIndex] : []}
+          activeIndices={activeIndices}
+          successIndices={successIndices}
         />
       </div>
     </div>
