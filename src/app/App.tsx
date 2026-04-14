@@ -1,11 +1,11 @@
 import { lazy, Suspense } from "react";
-import { Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 import Loader from "@/shared/ui/Loader";
 import { Sidebar } from "@/widgets/Sidebar";
 
 const HomePage = lazy(() => import("@/pages/homePage"));
 const SortingAlgorithmsPage = lazy(
-  () => import("@/pages/sortingAlgorithmsPage"),
+  () => import("@/pages/sortingAlgorithmsPage/ui/sortingAlgorithmsPage"),
 );
 const OtherAlgorithmsPage = lazy(() => import("@/pages/otherAlgorithmsPage"));
 const SearchingAlgorithmsPage = lazy(
@@ -21,7 +21,14 @@ function App() {
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/sorting" element={<SortingAlgorithmsPage />} />
+            <Route
+              path="/sorting"
+              element={<Navigate to="/sorting/bubble" replace />}
+            />
+            <Route
+              path="/sorting/:algoId"
+              element={<SortingAlgorithmsPage />}
+            />
             <Route path="/search" element={<SearchingAlgorithmsPage />} />
             <Route path="/other" element={<OtherAlgorithmsPage />} />
             <Route path="*" element={<NotFoundPage />} />

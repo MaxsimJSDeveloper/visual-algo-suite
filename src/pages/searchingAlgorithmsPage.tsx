@@ -25,7 +25,7 @@ const SearchingAlgorithmsPage = () => {
   });
 
   const onSearchSubmit = (data: SearchForm) => {
-    run(linearSearch, data.price);
+    run(linearSearch, Number(data.price));
   };
 
   const handleRegenerate = () => {

@@ -6,6 +6,7 @@ interface AppLinkProps extends LinkProps {
   variant?: "primary" | "secondary" | "success" | "accent";
   className?: string;
   isBlock?: boolean;
+  disabled?: boolean;
 }
 
 export const AppLink = ({
@@ -13,10 +14,11 @@ export const AppLink = ({
   variant = "primary",
   className = "",
   isBlock = false,
+  disabled = false,
   ...props
 }: AppLinkProps) => {
   const baseStyles =
-    "inline-flex items-center justify-center font-bold transition-all active:scale-95 text-center";
+    "inline-flex items-center justify-center font-bold transition-all text-center";
   const blockStyles = isBlock ? "w-full" : "";
 
   const variants = {
@@ -30,9 +32,22 @@ export const AppLink = ({
       "px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-900/20",
   };
 
+  const disabledStyles = disabled
+    ? "opacity-50 cursor-not-allowed pointer-events-none"
+    : "active:scale-95";
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    if (disabled) {
+      e.preventDefault();
+      return;
+    }
+  };
+
   return (
     <Link
-      className={`${baseStyles} ${blockStyles} ${variants[variant]} ${className}`}
+      className={`${baseStyles} ${blockStyles} ${variants[variant]} ${disabledStyles} ${className}`}
+      onClick={handleClick}
+      aria-disabled={disabled}
       {...props}
     >
       {children}

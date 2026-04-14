@@ -6,8 +6,8 @@ export const linearSearch: AlgoFn = async (fruits, controller, targetPrice) => {
     await controller.wait();
 
     if (fruits[i].price === targetPrice) {
-      controller.setSuccessIndices([i]);
       controller.setActiveIndices([]);
+      controller.setSuccessIndices([i]);
       return i;
     }
   }
