@@ -12,3 +12,9 @@ export type AlgoFn = (
   controller: AlgoController,
   targetPrice?: number,
 ) => Promise<void | number>;
+
+export interface AlgorithmConfig {
+  id: string;
+  name: string;
+  fn: AlgoFn;
+}

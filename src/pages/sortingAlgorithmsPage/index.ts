@@ -1,1 +1,1 @@
-export { SortingAlgorithmsPage } from "./ui/sortingAlgorithmsPage";
+export { default } from "./ui/sortingAlgorithmsPage";

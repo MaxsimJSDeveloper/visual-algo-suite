@@ -5,11 +5,11 @@ import { Sidebar } from "@/widgets/Sidebar";
 
 const HomePage = lazy(() => import("@/pages/homePage"));
 const SortingAlgorithmsPage = lazy(
-  () => import("@/pages/sortingAlgorithmsPage/ui/sortingAlgorithmsPage"),
+  () => import("@/pages/sortingAlgorithmsPage/index"),
 );
 const OtherAlgorithmsPage = lazy(() => import("@/pages/otherAlgorithmsPage"));
 const SearchingAlgorithmsPage = lazy(
-  () => import("@/pages/searchingAlgorithmsPage"),
+  () => import("@/pages/searchingAlgorithmsPage/index"),
 );
 const NotFoundPage = lazy(() => import("@/pages/notFoundPage"));
 
@@ -25,11 +25,12 @@ function App() {
               path="/sorting"
               element={<Navigate to="/sorting/bubble" replace />}
             />
+            <Route path="/sorting/:id" element={<SortingAlgorithmsPage />} />
             <Route
-              path="/sorting/:algoId"
-              element={<SortingAlgorithmsPage />}
+              path="/search"
+              element={<Navigate to="/search/linear" replace />}
             />
-            <Route path="/search" element={<SearchingAlgorithmsPage />} />
+            <Route path="/search/:id" element={<SearchingAlgorithmsPage />} />
             <Route path="/other" element={<OtherAlgorithmsPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

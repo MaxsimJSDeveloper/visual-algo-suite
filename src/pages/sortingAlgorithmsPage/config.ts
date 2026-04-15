@@ -1,12 +1,6 @@
 import { bubbleSort } from "@/features/sorting/model/bubbleSort";
 import { insertionSort } from "@/features/sorting/model/insertionSort";
-import type { AlgoFn } from "@/shared/lib/algoEngine/types";
-
-export interface AlgorithmConfig {
-  id: string;
-  name: string;
-  fn: AlgoFn;
-}
+import type { AlgorithmConfig } from "@/shared/lib/algoEngine/types";
 
 export const SORTING_ALGORITHMS: Record<string, AlgorithmConfig> = {
   bubble: {

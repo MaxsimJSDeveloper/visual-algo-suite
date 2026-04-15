@@ -1,28 +1,29 @@
-import { useParams, Navigate } from "react-router-dom";
 import { createFruitArr } from "@/entities/fruit";
 import { AlgoVisualizer } from "@/widgets/AlgoVisualizer";
 import { useAlgorithm } from "@/shared/lib/algoEngine/useAlgorithm";
 import { SORTING_ALGORITHMS, sortingNavItems } from "../config";
-import { useEffect } from "react";
 import { Title } from "@/shared/ui/Title";
 import { SubNav } from "@/shared/ui";
 import { Button } from "@/shared/ui/Button";
+import { useAlgoRoute } from "@/shared/lib";
+import { useEffect } from "react";
 
-export const SortingAlgorithmsPage = () => {
-  const { algoId } = useParams<{ algoId: string }>();
-
-  const currentAlgo = algoId ? SORTING_ALGORITHMS[algoId] : null;
+const SortingAlgorithmsPage = () => {
+  const { currentAlgo, RedirectFallback, isValid } = useAlgoRoute(
+    SORTING_ALGORITHMS,
+    "/sorting/bubble",
+  );
 
   const { fruits, activeIndices, successIndices, isRunning, run, reset } =
     useAlgorithm(createFruitArr(10), 300);
 
   useEffect(() => {
-    reset(createFruitArr(10));
-  }, [algoId, reset]);
+    if (isValid) {
+      reset(createFruitArr(10));
+    }
+  }, [isValid ? currentAlgo.id : null, reset]);
 
-  if (!currentAlgo) {
-    return <Navigate to="/sorting/bubble" replace />;
-  }
+  if (!isValid) return RedirectFallback;
 
   return (
     <div className="p-8 space-y-8">
@@ -49,7 +50,7 @@ export const SortingAlgorithmsPage = () => {
           disabled={isRunning}
           variant="outline"
         >
-          Regenerate Fruits
+          Regenerate
         </Button>
         <Button
           onClick={() => run(currentAlgo.fn)}
