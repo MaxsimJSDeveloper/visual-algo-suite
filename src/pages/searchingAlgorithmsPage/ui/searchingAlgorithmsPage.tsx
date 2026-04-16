@@ -1,16 +1,17 @@
 import { createFruitArr } from "@/entities/fruit";
 import { AlgoVisualizer } from "@/widgets/AlgoVisualizer";
 import { Title } from "@/shared/ui/Title";
-import { Button } from "@/shared/ui/Button";
 import { Input } from "@/shared/ui/Input";
 import { useForm } from "react-hook-form";
 import { useAlgorithm, useAlgoRoute } from "@/shared/lib";
 import { SubNav } from "@/shared/ui";
 import { SEARCHING_ALGORITHMS, searchingNavItems } from "../config";
 import { useEffect } from "react";
+import { AlgoControls } from "@/widgets/AlgoControls/AlgoControls";
 
 interface SearchForm {
   price: number;
+  delay: number;
 }
 
 const SearchingAlgorithmsPage = () => {
@@ -19,8 +20,15 @@ const SearchingAlgorithmsPage = () => {
     "/search/linear",
   );
 
-  const { fruits, activeIndices, successIndices, isRunning, run, reset } =
-    useAlgorithm(createFruitArr(10), 300);
+  const {
+    fruits,
+    activeIndices,
+    successIndices,
+    isRunning,
+    run,
+    reset,
+    setSpeed,
+  } = useAlgorithm(createFruitArr(10), 300);
 
   const {
     register,
@@ -28,11 +36,12 @@ const SearchingAlgorithmsPage = () => {
     setValue,
     formState: { errors },
   } = useForm<SearchForm>({
-    defaultValues: { price: 0 },
+    defaultValues: { price: 0, delay: 300 },
   });
 
   const onSearchSubmit = (data: SearchForm) => {
     if (!currentAlgo) return;
+    setSpeed(Number(data.delay));
     run(currentAlgo.fn, Number(data.price));
   };
 
@@ -87,34 +96,26 @@ const SearchingAlgorithmsPage = () => {
         />
       </div>
 
-      <div className="control-panel flex justify-between">
-        <form
-          onSubmit={handleSubmit(onSearchSubmit)}
-          className="flex items-end gap-4"
-        >
-          <Input
-            label="Target Price"
-            type="number"
-            placeholder="Enter price..."
-            {...register("price", {
-              required: "Price is required",
-              min: { value: 1, message: "Too low" },
-              max: { value: 100, message: "Too high" },
-            })}
-            error={errors.price?.message}
-          />
-
-          <Button type="submit" disabled={isRunning}>
-            Find Fruit
-          </Button>
-        </form>
-
-        <div className="block my-auto">
-          <Button onClick={handleRegenerate} disabled={isRunning}>
-            Regenerate
-          </Button>
-        </div>
-      </div>
+      <AlgoControls
+        isRunning={isRunning}
+        onRegenerate={handleRegenerate}
+        onSubmit={handleSubmit(onSearchSubmit)}
+        submitText="Find Fruit"
+        register={register}
+        errors={errors}
+      >
+        <Input
+          label="Target Price"
+          type="number"
+          placeholder="Enter price..."
+          {...register("price", {
+            required: "Price is required",
+            min: { value: 1, message: "Too low" },
+            max: { value: 100, message: "Too high" },
+          })}
+          error={errors.price?.message}
+        />
+      </AlgoControls>
     </div>
   );
 };

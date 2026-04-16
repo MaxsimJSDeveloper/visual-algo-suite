@@ -4,9 +4,14 @@ import { useAlgorithm } from "@/shared/lib/algoEngine/useAlgorithm";
 import { SORTING_ALGORITHMS, sortingNavItems } from "../config";
 import { Title } from "@/shared/ui/Title";
 import { SubNav } from "@/shared/ui";
-import { Button } from "@/shared/ui/Button";
 import { useAlgoRoute } from "@/shared/lib";
 import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { AlgoControls } from "@/widgets/AlgoControls/AlgoControls";
+
+interface SortingForm {
+  delay: number;
+}
 
 const SortingAlgorithmsPage = () => {
   const { currentAlgo, RedirectFallback, isValid } = useAlgoRoute(
@@ -14,8 +19,29 @@ const SortingAlgorithmsPage = () => {
     "/sorting/bubble",
   );
 
-  const { fruits, activeIndices, successIndices, isRunning, run, reset } =
-    useAlgorithm(createFruitArr(10), 300);
+  const {
+    fruits,
+    activeIndices,
+    successIndices,
+    isRunning,
+    run,
+    reset,
+    setSpeed,
+  } = useAlgorithm(createFruitArr(10), 300);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SortingForm>({
+    defaultValues: { delay: 300 },
+  });
+
+  const onSortSubmit = (data: SortingForm) => {
+    if (!currentAlgo) return;
+    setSpeed(Number(data.delay));
+    run(currentAlgo.fn);
+  };
 
   useEffect(() => {
     if (isValid) {
@@ -44,22 +70,14 @@ const SortingAlgorithmsPage = () => {
         />
       </div>
 
-      <div className="flex gap-4">
-        <Button
-          onClick={() => reset(createFruitArr(10))}
-          disabled={isRunning}
-          variant="outline"
-        >
-          Regenerate
-        </Button>
-        <Button
-          onClick={() => run(currentAlgo.fn)}
-          disabled={isRunning}
-          variant="success"
-        >
-          {isRunning ? "Running..." : `Start ${currentAlgo.name}`}
-        </Button>
-      </div>
+      <AlgoControls
+        isRunning={isRunning}
+        onRegenerate={() => reset(createFruitArr(10))}
+        onSubmit={handleSubmit(onSortSubmit)}
+        submitText={`Start ${currentAlgo.name}`}
+        register={register}
+        errors={errors}
+      />
     </div>
   );
 };

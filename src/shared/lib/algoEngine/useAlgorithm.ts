@@ -1,17 +1,20 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import type { Fruit } from "@/entities/fruit";
 import type { AlgoController, AlgoFn } from "./types";
 
-export const useAlgorithm = (
-  initialFruits: Fruit[],
-  defaultSpeed: number = 200,
-) => {
+export const useAlgorithm = (initialFruits: Fruit[], defaultSpeed: number) => {
   const [fruits, setFruits] = useState<Fruit[]>(initialFruits);
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
   const [successIndices, setSuccessIndices] = useState<number[]>([]);
-
   const [isRunning, setIsRunning] = useState(false);
-  const [speed, setSpeed] = useState(defaultSpeed);
+
+  const speedRef = useRef(defaultSpeed);
+  const [speed, setSpeedState] = useState(defaultSpeed);
+
+  const setSpeed = useCallback((newSpeed: number) => {
+    speedRef.current = newSpeed;
+    setSpeedState(newSpeed);
+  }, []);
 
   const reset = useCallback((newFruits: Fruit[]) => {
     setFruits(newFruits);
@@ -30,7 +33,8 @@ export const useAlgorithm = (
       updateFruits: (newFruits) => setFruits([...newFruits]),
       setActiveIndices: (indices) => setActiveIndices(indices),
       setSuccessIndices: (indices) => setSuccessIndices(indices),
-      wait: () => new Promise((resolve) => setTimeout(resolve, speed)),
+      wait: () =>
+        new Promise((resolve) => setTimeout(resolve, speedRef.current)),
     };
 
     try {
