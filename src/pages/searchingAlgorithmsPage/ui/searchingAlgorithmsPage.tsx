@@ -28,6 +28,7 @@ const SearchingAlgorithmsPage = () => {
     run,
     reset,
     setSpeed,
+    stop,
   } = useAlgorithm(createFruitArr(10), 300);
 
   const {
@@ -102,6 +103,7 @@ const SearchingAlgorithmsPage = () => {
         onSubmit={handleSubmit(onSearchSubmit)}
         submitText="Find Fruit"
         register={register}
+        stop={stop}
         errors={errors}
       >
         <Input

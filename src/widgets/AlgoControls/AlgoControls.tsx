@@ -14,20 +14,22 @@ interface BaseAlgoForm extends FieldValues {
 
 interface AlgoControlsProps<TFormValues extends BaseAlgoForm> {
   isRunning: boolean;
+  submitText: string;
   onRegenerate: () => void;
   onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
-  submitText: string;
   register: UseFormRegister<TFormValues>;
+  stop: () => void;
   errors: FieldErrors<TFormValues>;
   children?: ReactNode;
 }
 
 export const AlgoControls = <TFormValues extends BaseAlgoForm>({
   isRunning,
-  onRegenerate,
-  onSubmit,
   submitText,
   register,
+  onRegenerate,
+  onSubmit,
+  stop,
   errors,
   children,
 }: AlgoControlsProps<TFormValues>) => {
@@ -63,6 +65,9 @@ export const AlgoControls = <TFormValues extends BaseAlgoForm>({
           variant="success"
         >
           {isRunning ? "Running..." : submitText}
+        </Button>
+        <Button onClick={stop} disabled={!isRunning} variant="danger">
+          Stop
         </Button>
         <Button onClick={onRegenerate} disabled={isRunning} variant="outline">
           Regenerate Array

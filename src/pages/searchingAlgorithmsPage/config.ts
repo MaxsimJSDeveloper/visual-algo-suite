@@ -1,5 +1,4 @@
 import { binarySearch, linearSearch } from "@/features/searching";
-
 import type { AlgorithmConfig } from "@/shared/lib/algoEngine/types";
 
 export const SEARCHING_ALGORITHMS: Record<string, AlgorithmConfig> = {

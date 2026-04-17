@@ -27,6 +27,7 @@ const SortingAlgorithmsPage = () => {
     run,
     reset,
     setSpeed,
+    stop,
   } = useAlgorithm(createFruitArr(10), 300);
 
   const {
@@ -77,6 +78,7 @@ const SortingAlgorithmsPage = () => {
         submitText={`Start ${currentAlgo.name}`}
         register={register}
         errors={errors}
+        stop={stop}
       />
     </div>
   );

@@ -22,7 +22,7 @@ export const Button = ({
     success:
       "bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20",
     danger:
-      "border border-red-500/50 hover:bg-red-500/10 hover:text-red-400 text-red-400",
+      "bg-red-800/80 hover:bg-red-500 text-white shadow-lg shadow-red-900/30 border border-red-500/50",
   };
 
   return (

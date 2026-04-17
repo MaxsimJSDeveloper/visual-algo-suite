@@ -7,9 +7,18 @@ export const useAlgorithm = (initialFruits: Fruit[], defaultSpeed: number) => {
   const [activeIndices, setActiveIndices] = useState<number[]>([]);
   const [successIndices, setSuccessIndices] = useState<number[]>([]);
   const [isRunning, setIsRunning] = useState(false);
+  const [speed, setSpeedState] = useState(defaultSpeed);
 
   const speedRef = useRef(defaultSpeed);
-  const [speed, setSpeedState] = useState(defaultSpeed);
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  const stop = useCallback(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      setIsRunning(false);
+      setActiveIndices([]);
+    }
+  }, []);
 
   const setSpeed = useCallback((newSpeed: number) => {
     speedRef.current = newSpeed;
@@ -25,6 +34,9 @@ export const useAlgorithm = (initialFruits: Fruit[], defaultSpeed: number) => {
   const run = async (algo: AlgoFn, targetPrice?: number) => {
     if (isRunning) return;
 
+    const stopController = new AbortController();
+    abortControllerRef.current = stopController;
+
     setIsRunning(true);
     setActiveIndices([]);
     setSuccessIndices([]);
@@ -34,13 +46,35 @@ export const useAlgorithm = (initialFruits: Fruit[], defaultSpeed: number) => {
       setActiveIndices: (indices) => setActiveIndices(indices),
       setSuccessIndices: (indices) => setSuccessIndices(indices),
       wait: () =>
-        new Promise((resolve) => setTimeout(resolve, speedRef.current)),
+        new Promise((resolve, reject) => {
+          if (stopController.signal.aborted) {
+            return reject(new Error("Stop"));
+          }
+
+          const timeout = setTimeout(resolve, speedRef.current);
+
+          stopController.signal.addEventListener(
+            "abort",
+            () => {
+              clearTimeout(timeout);
+              reject(new Error("Stop"));
+            },
+            { once: true },
+          );
+        }),
     };
 
     try {
       await algo(fruits, controller, targetPrice);
+    } catch (e) {
+      if (e instanceof Error && e.message === "Stop") {
+        console.log("Algorithm stopped manually.");
+      } else {
+        console.error(e);
+      }
     } finally {
       setIsRunning(false);
+      abortControllerRef.current = null;
     }
   };
 
@@ -53,5 +87,6 @@ export const useAlgorithm = (initialFruits: Fruit[], defaultSpeed: number) => {
     setSpeed,
     reset,
     run,
+    stop,
   };
 };

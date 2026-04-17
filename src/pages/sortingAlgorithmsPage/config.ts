@@ -1,5 +1,4 @@
-import { bubbleSort } from "@/features/sorting/model/bubbleSort";
-import { insertionSort } from "@/features/sorting/model/insertionSort";
+import { bubbleSort, insertionSort, quickSort, selectionSort } from "@/features/sorting";
 import type { AlgorithmConfig } from "@/shared/lib/algoEngine/types";
 
 export const SORTING_ALGORITHMS: Record<string, AlgorithmConfig> = {
@@ -12,6 +11,16 @@ export const SORTING_ALGORITHMS: Record<string, AlgorithmConfig> = {
     id: "insertion",
     name: "Insertion Sort",
     fn: insertionSort,
+  },
+  selection: {
+    id: "selection",
+    name: "Selection Sort",
+    fn: selectionSort,
+  },
+  quick: {
+    id: "quick",
+    name: "Quick Sort",
+    fn: quickSort,
   },
 };
 
