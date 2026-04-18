@@ -44,11 +44,13 @@ const SortingAlgorithmsPage = () => {
     run(currentAlgo.fn);
   };
 
+  const algoId = isValid ? currentAlgo.id : null;
+
   useEffect(() => {
     if (isValid) {
       reset(createFruitArr(10));
     }
-  }, [isValid ? currentAlgo.id : null, reset]);
+  }, [algoId, isValid, reset]);
 
   if (!isValid) return RedirectFallback;
 

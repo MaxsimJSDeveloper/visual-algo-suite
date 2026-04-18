@@ -60,21 +60,23 @@ const SearchingAlgorithmsPage = () => {
     setValue("price", randomTarget);
   };
 
+  const algoId = isValid ? currentAlgo.id : null;
+
   useEffect(() => {
-    if (isValid && currentAlgo) {
-      const newFruits = createFruitArr(10);
+    if (!algoId) return;
 
-      if (currentAlgo.id === "binary") {
-        newFruits.sort((a, b) => a.price - b.price);
-      }
+    const newFruits = createFruitArr(10);
 
-      reset(newFruits);
-
-      const randomTarget =
-        newFruits[Math.floor(Math.random() * newFruits.length)].price;
-      setValue("price", randomTarget);
+    if (algoId === "binary") {
+      newFruits.sort((a, b) => a.price - b.price);
     }
-  }, [isValid ? currentAlgo.id : null, reset, setValue]);
+
+    reset(newFruits);
+
+    const randomTarget =
+      newFruits[Math.floor(Math.random() * newFruits.length)].price;
+    setValue("price", randomTarget);
+  }, [algoId, reset, setValue]);
 
   if (!isValid) return RedirectFallback;
 
