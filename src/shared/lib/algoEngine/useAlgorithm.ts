@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 import type { Fruit } from "@/entities/fruit";
 import type { AlgoController, AlgoFn } from "./types";
+import { toast } from "sonner";
 
 export const useAlgorithm = (initialFruits: Fruit[], defaultSpeed: number) => {
   const [fruits, setFruits] = useState<Fruit[]>(initialFruits);
@@ -65,12 +66,23 @@ export const useAlgorithm = (initialFruits: Fruit[], defaultSpeed: number) => {
     };
 
     try {
-      await algo(fruits, controller, targetPrice);
+      const result = await algo(fruits, controller, targetPrice);
+      if (targetPrice !== undefined) {
+        if (result !== -1) {
+          toast.success(
+            `Fruit with price $${targetPrice} found at index ${result}!`,
+          );
+        } else {
+          toast.warning(`Fruit with price $${targetPrice} not found.`);
+        }
+      } else {
+        toast.success("Sorting completed successfully!");
+      }
     } catch (e) {
       if (e instanceof Error && e.message === "Stop") {
-        console.log("Algorithm stopped manually.");
+        toast.info("Algorithm stopped manually.");
       } else {
-        console.error(e);
+        toast.error("An error occurred during execution.");
       }
     } finally {
       setIsRunning(false);

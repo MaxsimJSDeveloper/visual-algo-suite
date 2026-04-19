@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router";
 import Loader from "@/shared/ui/Loader";
 import { Sidebar } from "@/widgets/Sidebar";
+import { Toaster } from "sonner";
 
 const HomePage = lazy(() => import("@/pages/homePage"));
 const SortingAlgorithmsPage = lazy(
@@ -35,6 +36,7 @@ function App() {
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
+        <Toaster theme="dark" position="top-center" richColors />
       </main>
     </>
   );
