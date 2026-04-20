@@ -5,13 +5,16 @@ import { SORTING_ALGORITHMS, sortingNavItems } from "../config";
 import { Title } from "@/shared/ui/Title";
 import { SubNav } from "@/shared/ui";
 import { useAlgoRoute } from "@/shared/lib";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { AlgoControls } from "@/widgets/AlgoControls/AlgoControls";
+import Loader from "@/shared/ui/Loader";
 
 interface SortingForm {
   delay: number;
 }
+
+const CodeViewer = lazy(() => import("@/widgets/CodeViewer/CodeViewer"));
 
 const SortingAlgorithmsPage = () => {
   const { currentAlgo, RedirectFallback, isValid } = useAlgoRoute(
@@ -82,6 +85,9 @@ const SortingAlgorithmsPage = () => {
         errors={errors}
         stop={stop}
       />
+      <Suspense fallback={<Loader />}>
+        <CodeViewer snippets={currentAlgo.codeSnippets} />
+      </Suspense>
     </div>
   );
 };

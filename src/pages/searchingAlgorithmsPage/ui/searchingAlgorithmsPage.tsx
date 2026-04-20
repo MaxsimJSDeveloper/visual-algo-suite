@@ -6,13 +6,16 @@ import { useForm } from "react-hook-form";
 import { useAlgorithm, useAlgoRoute } from "@/shared/lib";
 import { SubNav } from "@/shared/ui";
 import { SEARCHING_ALGORITHMS, searchingNavItems } from "../config";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { AlgoControls } from "@/widgets/AlgoControls/AlgoControls";
+import { Loader } from "@/shared/ui/Loader";
 
 interface SearchForm {
   price: number;
   delay: number;
 }
+
+const CodeViewer = lazy(() => import("@/widgets/CodeViewer/CodeViewer"));
 
 const SearchingAlgorithmsPage = () => {
   const { currentAlgo, RedirectFallback, isValid } = useAlgoRoute(
@@ -81,7 +84,7 @@ const SearchingAlgorithmsPage = () => {
   if (!isValid) return RedirectFallback;
 
   return (
-    <div className="page-container">
+    <div className="page-container space-y-8">
       <Title as="h1">Search Laboratory 🔍</Title>
 
       <SubNav
@@ -120,6 +123,12 @@ const SearchingAlgorithmsPage = () => {
           error={errors.price?.message}
         />
       </AlgoControls>
+
+      <Suspense fallback={<Loader />}>
+        {currentAlgo?.codeSnippets && (
+          <CodeViewer snippets={currentAlgo.codeSnippets} />
+        )}
+      </Suspense>
     </div>
   );
 };

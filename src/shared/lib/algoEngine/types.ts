@@ -1,5 +1,7 @@
 import type { Fruit } from "@/entities/fruit";
 
+export type CodeLanguage = "python" | "csharp";
+
 export interface AlgoController {
   updateFruits: (fruits: Fruit[]) => void;
   setActiveIndices: (indices: number[]) => void;
@@ -17,4 +19,5 @@ export interface AlgorithmConfig {
   id: string;
   name: string;
   fn: AlgoFn;
+  codeSnippets?: Partial<Record<CodeLanguage, string>>;
 }
