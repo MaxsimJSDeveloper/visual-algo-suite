@@ -3,6 +3,8 @@ import {
   bubbleSortSnippets,
   insertionSort,
   insertionSortSnippets,
+  mergeSort,
+  mergeSortSnippets,
   quickSort,
   quickSortSnippets,
   selectionSort,
@@ -34,6 +36,12 @@ export const SORTING_ALGORITHMS: Record<string, AlgorithmConfig> = {
     name: "Quick Sort",
     fn: quickSort,
     codeSnippets: quickSortSnippets,
+  },
+  merge: {
+    id: "merge",
+    name: "Merge Sort",
+    fn: mergeSort,
+    codeSnippets: mergeSortSnippets,
   },
 };
 
