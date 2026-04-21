@@ -9,3 +9,6 @@ export { quickSortSnippets } from "./model/quickSort.snippets";
 
 export { selectionSort } from "./model/selectionSort";
 export { selectionSortSnippets } from "./model/selectionSort.snippets";
+
+export { mergeSort } from "./model/mergeSort";
+export { mergeSortSnippets } from "./model/mergeSort.snippets";
