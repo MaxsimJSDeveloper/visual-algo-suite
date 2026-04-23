@@ -13,13 +13,16 @@ export const quickSort: AlgoFn = async (fruits, controller) => {
       controller.setActiveIndices([j, high, i + 1]);
       await controller.wait();
 
+      controller.recordComparison();
       if (arr[j].price < pivot.price) {
         i++;
+        controller.recordSwap();
         [arr[i], arr[j]] = [arr[j], arr[i]];
         controller.updateFruits([...arr]);
       }
     }
 
+    controller.recordSwap();
     [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
     controller.updateFruits([...arr]);
 

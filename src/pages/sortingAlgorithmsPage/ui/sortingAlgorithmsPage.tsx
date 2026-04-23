@@ -9,6 +9,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { AlgoControls } from "@/widgets/AlgoControls/AlgoControls";
 import Loader from "@/shared/ui/Loader";
+import AlgoStats from "@/widgets/AlgoStats";
 
 interface SortingForm {
   delay: number;
@@ -27,8 +28,10 @@ const SortingAlgorithmsPage = () => {
     activeIndices,
     successIndices,
     isRunning,
+    stats,
     run,
     reset,
+    resetStats,
     setSpeed,
     stop,
   } = useAlgorithm(createFruitArr(10), 300);
@@ -49,11 +52,17 @@ const SortingAlgorithmsPage = () => {
 
   const algoId = isValid ? currentAlgo.id : null;
 
+  const handleRegenerate = () => {
+    reset(createFruitArr(10));
+    resetStats();
+  };
+
   useEffect(() => {
     if (isValid) {
       reset(createFruitArr(10));
+      resetStats();
     }
-  }, [algoId, isValid, reset]);
+  }, [algoId, isValid, reset, resetStats]);
 
   if (!isValid) return RedirectFallback;
 
@@ -68,7 +77,9 @@ const SortingAlgorithmsPage = () => {
         disable={isRunning}
       />
 
-      <div className="visualizer-container">
+      <div className="visualizer-container relative w-full rounded-2xl border border-slate-700/30 bg-slate-800/20 overflow-hidden">
+        <AlgoStats comparisons={stats.comparisons} swaps={stats.swaps} />
+
         <AlgoVisualizer
           fruits={fruits}
           activeIndices={activeIndices}
@@ -78,7 +89,7 @@ const SortingAlgorithmsPage = () => {
 
       <AlgoControls
         isRunning={isRunning}
-        onRegenerate={() => reset(createFruitArr(10))}
+        onRegenerate={handleRegenerate}
         onSubmit={handleSubmit(onSortSubmit)}
         submitText={`Start ${currentAlgo.name}`}
         register={register}

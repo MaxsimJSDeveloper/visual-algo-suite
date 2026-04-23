@@ -7,6 +7,8 @@ export interface AlgoController {
   setActiveIndices: (indices: number[]) => void;
   setSuccessIndices: (indices: number[]) => void;
   wait: () => Promise<void>;
+  recordComparison: () => void;
+  recordSwap: () => void;
 }
 
 export type AlgoFn = (

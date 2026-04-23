@@ -9,6 +9,11 @@ export const useAlgorithm = (initialFruits: Fruit[], defaultSpeed: number) => {
   const [successIndices, setSuccessIndices] = useState<number[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [speed, setSpeedState] = useState(defaultSpeed);
+  const [stats, setStats] = useState({ comparisons: 0, swaps: 0 });
+
+  const resetStats = useCallback(() => {
+    setStats({ comparisons: 0, swaps: 0 });
+  }, []);
 
   const speedRef = useRef(defaultSpeed);
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -35,6 +40,7 @@ export const useAlgorithm = (initialFruits: Fruit[], defaultSpeed: number) => {
   const run = async (algo: AlgoFn, targetPrice?: number) => {
     if (isRunning) return;
 
+    resetStats();
     const stopController = new AbortController();
     abortControllerRef.current = stopController;
 
@@ -63,6 +69,10 @@ export const useAlgorithm = (initialFruits: Fruit[], defaultSpeed: number) => {
             { once: true },
           );
         }),
+      recordComparison: () =>
+        setStats((prev) => ({ ...prev, comparisons: prev.comparisons + 1 })),
+      recordSwap: () =>
+        setStats((prev) => ({ ...prev, swaps: prev.swaps + 1 })),
     };
 
     try {
@@ -96,8 +106,10 @@ export const useAlgorithm = (initialFruits: Fruit[], defaultSpeed: number) => {
     successIndices,
     isRunning,
     speed,
+    stats,
     setSpeed,
     reset,
+    resetStats,
     run,
     stop,
   };

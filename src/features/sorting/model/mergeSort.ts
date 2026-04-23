@@ -14,6 +14,7 @@ export const mergeSort: AlgoFn = async (fruits, controller) => {
       controller.setActiveIndices([i, j]);
       await controller.wait();
 
+      controller.recordComparison();
       if (arr[i].price <= arr[j].price) {
         temp.push(arr[i++]);
       } else {
@@ -25,6 +26,7 @@ export const mergeSort: AlgoFn = async (fruits, controller) => {
     while (j <= right) temp.push(arr[j++]);
 
     for (let k = left; k <= right; k++) {
+      controller.recordSwap();
       arr[k] = temp[k - left];
 
       controller.setActiveIndices([k]);

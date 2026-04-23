@@ -8,9 +8,11 @@ export const bubbleSort: AlgoFn = async (fruits: Fruit[], controller) => {
   for (let i = 0; i < arr.length; i++) {
     for (let j = 0; j < arr.length - i - 1; j++) {
       controller.setActiveIndices([j, j + 1]);
+      controller.recordComparison();
       await controller.wait();
 
       if (arr[j].price > arr[j + 1].price) {
+        controller.recordSwap();
         [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
         controller.updateFruits([...arr]);
       }

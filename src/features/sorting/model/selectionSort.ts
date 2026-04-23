@@ -14,12 +14,14 @@ export const selectionSort: AlgoFn = async (fruits, controller) => {
       controller.setActiveIndices([i, j, minIdx]);
       await controller.wait();
 
+      controller.recordComparison();
       if (arr[j].price < arr[minIdx].price) {
         minIdx = j;
       }
     }
 
     if (minIdx !== i) {
+      controller.recordSwap();
       [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
       controller.updateFruits([...arr]);
     }
