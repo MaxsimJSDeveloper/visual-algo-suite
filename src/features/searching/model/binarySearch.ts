@@ -12,6 +12,7 @@ export const binarySearch: AlgoFn = async (fruits, controller, targetPrice) => {
     controller.setActiveIndices([left, right, mid]);
     await controller.wait();
 
+    controller.recordComparison();
     if (fruits[mid].price === targetPrice) {
       controller.setSuccessIndices([mid]);
       controller.setActiveIndices([]);

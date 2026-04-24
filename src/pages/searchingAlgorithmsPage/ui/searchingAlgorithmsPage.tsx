@@ -9,6 +9,7 @@ import { SEARCHING_ALGORITHMS, searchingNavItems } from "../config";
 import { lazy, Suspense, useEffect } from "react";
 import { AlgoControls } from "@/widgets/AlgoControls/AlgoControls";
 import { Loader } from "@/shared/ui/Loader";
+import AlgoStats from "@/widgets/AlgoStats";
 
 interface SearchForm {
   price: number;
@@ -28,8 +29,10 @@ const SearchingAlgorithmsPage = () => {
     activeIndices,
     successIndices,
     isRunning,
+    stats,
     run,
     reset,
+    resetStats,
     setSpeed,
     stop,
   } = useAlgorithm(createFruitArr(10), 300);
@@ -57,6 +60,7 @@ const SearchingAlgorithmsPage = () => {
     }
 
     reset(newFruits);
+    resetStats();
 
     const randomTarget =
       newFruits[Math.floor(Math.random() * newFruits.length)].price;
@@ -75,11 +79,12 @@ const SearchingAlgorithmsPage = () => {
     }
 
     reset(newFruits);
+    resetStats();
 
     const randomTarget =
       newFruits[Math.floor(Math.random() * newFruits.length)].price;
     setValue("price", randomTarget);
-  }, [algoId, reset, setValue]);
+  }, [algoId, reset, setValue, resetStats]);
 
   if (!isValid) return RedirectFallback;
 
@@ -94,7 +99,9 @@ const SearchingAlgorithmsPage = () => {
         disable={isRunning}
       />
 
-      <div className="visualizer-container">
+      <div className="visualizer-container relative w-full rounded-2xl border border-slate-700/30 bg-slate-800/20 overflow-hidden">
+        <AlgoStats comparisons={stats.comparisons} />
+
         <AlgoVisualizer
           fruits={fruits}
           activeIndices={activeIndices}
